@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">memorytrainer</string>
+    <string name="game_rules_text">
+        Добро пожаловать в игру! Здесь вы должны запоминать пары и тренировать память
+        \n\nПравила:\n1. Найдите пары одинаковых карт\n2. Используйте подсказки\n3. Удачи!
+    </string>
+    <string name="rules_game1">Правила игры 1: lalala</string>
+    <string name="rules_game2">Правила игры 2: lalala</string>
+    <string name="rules_game3">Правила игры 3: lalala</string>
+</resources>
