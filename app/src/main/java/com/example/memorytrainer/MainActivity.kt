@@ -47,17 +47,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, ReminderActivity::class.java))
         }
 
-        findViewById<Button>(R.id.btn_settings).setOnClickListener {
-            // startActivity(Intent(this, SettingsActivity::class.java))
-        }
 
-        findViewById<Button>(R.id.btn_logout).setOnClickListener {
-            userManager.logoutUser()
-            val intent = Intent(this, AuthActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
-        }
     }
 
     private fun checkFirstRun() {
@@ -119,8 +109,21 @@ class MainActivity : AppCompatActivity() {
                 true
             }
 
-            R.id.menu_reminders -> {
-                startActivity(Intent(this, ReminderActivity::class.java))
+            R.id.menu_theme_light -> {
+                AlertDialog.Builder(this)
+                    .setTitle("Выбор темы")
+                    .setMessage("Вы выбрали Светлую тему (пока без функционала).")
+                    .setPositiveButton("OK", null)
+                    .show()
+                true
+            }
+
+            R.id.menu_theme_dark -> {
+                AlertDialog.Builder(this)
+                    .setTitle("Выбор темы")
+                    .setMessage("Вы выбрали Тёмную тему (пока без функционала).")
+                    .setPositiveButton("OK", null)
+                    .show()
                 true
             }
 

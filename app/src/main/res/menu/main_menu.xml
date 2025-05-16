@@ -4,8 +4,17 @@
         android:id="@+id/menu_about"
         android:title="О приложении" />
     <item
-        android:id="@+id/menu_reminders"
-        android:title="Напоминания" />
+        android:id="@+id/menu_theme"
+        android:title="Тема">
+        <menu>
+            <item
+                android:id="@+id/menu_theme_light"
+                android:title="Светлая" />
+            <item
+                android:id="@+id/menu_theme_dark"
+                android:title="Тёмная" />
+        </menu>
+    </item>
     <item
         android:id="@+id/menu_logout"
         android:title="Выход" />

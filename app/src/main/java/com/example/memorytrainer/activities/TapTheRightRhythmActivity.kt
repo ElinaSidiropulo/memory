@@ -17,18 +17,22 @@ class TapTheRightRhythmActivity : AppCompatActivity() {
 
     private lateinit var rhythmText: TextView
     private lateinit var frameLayout: FrameLayout
-
-    private val rhythmSequence = mutableListOf<Int>()
-    private var currentStep = 0
+    private lateinit var vibrator: Vibrator
 
     private val handler = Handler(Looper.getMainLooper())
-    private lateinit var vibrator: Vibrator
 
     private val gridSize = 4
     private val totalCubes = gridSize * gridSize
+    private lateinit var cubes: Array<Button>
+
+    private val rhythmSequence = mutableListOf<Int>()
+    private var currentStep = 0
     private var isPlayerTurn = false
 
-    private lateinit var cubes: Array<Button>
+    // Новые переменные для прогрессии сложности
+    private var currentLength = 2
+    private var repeatCount = 0
+    private val maxLength = 7
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +40,6 @@ class TapTheRightRhythmActivity : AppCompatActivity() {
 
         rhythmText = findViewById(R.id.rhythmText)
         frameLayout = findViewById(R.id.frameLayout)
-
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         initializeCubes()
@@ -56,7 +59,6 @@ class TapTheRightRhythmActivity : AppCompatActivity() {
                 setOnClickListener {
                     if (isPlayerTurn) {
                         onPlayerTap(index)
-                        // Сделать кнопку темнее при клике
                         animate().alpha(0.5f).setDuration(100).withEndAction {
                             animate().alpha(1f).setDuration(100)
                         }
@@ -72,55 +74,43 @@ class TapTheRightRhythmActivity : AppCompatActivity() {
         currentStep = 0
         isPlayerTurn = false
 
-        rhythmText.text = "Запоминай ритм..."
+        rhythmText.text = "Запоминайте ритм..."
         generateRhythm()
-
-        showRhythm()
     }
 
     private fun generateRhythm() {
         rhythmSequence.clear()
-        currentStep = 0
-        isPlayerTurn = false
-
-        rhythmText.text = "Запоминай ритм..."
-
-        // Уменьшаем количество шагов в последовательности (например, до 3)
-        for (i in 0 until 4) {
+        for (i in 0 until currentLength) {
             rhythmSequence.add((0 until totalCubes).random())
         }
 
+        Toast.makeText(this, "Длина ритма: $currentLength", Toast.LENGTH_SHORT).show()
         showRhythm()
     }
-
 
     private fun showRhythm() {
         var delay = 0L
 
-        // Увеличиваем задержку между подсветкой шагов (например, до 1500 миллисекунд)
         for (step in rhythmSequence) {
             handler.postDelayed({
                 highlightCube(step)
             }, delay)
-            delay += 1500L // Задержка между шагами увеличена
+            delay += 800L
         }
 
         handler.postDelayed({
-            rhythmText.text = "Твоя очередь!"
+            resetCubes()
+            rhythmText.text = "Ваша очередь!"
             isPlayerTurn = true
         }, delay)
     }
 
     private fun highlightCube(step: Int) {
-        // Сброс всех кубиков в серый цвет
         resetCubes()
-
-        // Подсветить выбранный кубик
         cubes[step].setBackgroundColor(Color.GREEN)
     }
 
     private fun resetCubes() {
-        // Восстановить все кубики в серый цвет
         cubes.forEach { it.setBackgroundColor(Color.GRAY) }
     }
 
@@ -129,21 +119,26 @@ class TapTheRightRhythmActivity : AppCompatActivity() {
             currentStep++
             if (currentStep == rhythmSequence.size) {
                 Toast.makeText(this, "Правильно!", Toast.LENGTH_SHORT).show()
-                handler.postDelayed({ startNewGame() }, 1000)
+                isPlayerTurn = false
+                repeatCount++
+
+                handler.postDelayed({
+                    if (repeatCount == 5) {
+                        currentLength++
+                        repeatCount = 0
+                        if (currentLength > maxLength) {
+                            Toast.makeText(this, "Потрясающе! Вы прошли все уровни!", Toast.LENGTH_LONG).show()
+                            currentLength = 2
+                        }
+                    }
+                    startNewGame()
+                }, 1000)
             }
         } else {
-            Toast.makeText(this, "Неверно, попробуй снова!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Неверно, попробуйте снова!", Toast.LENGTH_SHORT).show()
+            isPlayerTurn = false
+            repeatCount = 0 // сброс прогресса по текущей длине
             handler.postDelayed({ startNewGame() }, 1000)
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        // Сохраняем прогресс игры, если нужно
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // Восстанавливаем прогресс игры
     }
 }

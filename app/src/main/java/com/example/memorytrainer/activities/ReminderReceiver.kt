@@ -19,14 +19,25 @@ class ReminderReceiver : BroadcastReceiver() {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel("reminder_channel", "Напоминания", NotificationManager.IMPORTANCE_DEFAULT)
+            val channel = NotificationChannel(
+                "reminder_channel",
+                "Напоминания",
+                NotificationManager.IMPORTANCE_HIGH // ВАЖНО
+            ).apply {
+                description = "Канал для срочных напоминаний"
+                enableVibration(true)
+            }
             notificationManager.createNotificationChannel(channel)
         }
+
 
         val notification = NotificationCompat.Builder(context, "reminder_channel")
             .setContentTitle("Напоминание")
             .setContentText(reminderTitle)
             .setSmallIcon(R.drawable.ic_notification)
+            .setPriority(NotificationCompat.PRIORITY_HIGH) // ВАЖНО
+            .setDefaults(Notification.DEFAULT_ALL) // звук, вибрация и т.д.
+            .setAutoCancel(true)
             .build()
 
         notificationManager.notify(0, notification)

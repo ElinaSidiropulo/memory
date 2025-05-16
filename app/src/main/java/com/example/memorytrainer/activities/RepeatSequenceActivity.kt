@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.memorytrainer.R
 import kotlin.random.Random
 
-
 class RepeatSequenceActivity : AppCompatActivity() {
 
     private lateinit var sequenceText: TextView
@@ -23,7 +22,11 @@ class RepeatSequenceActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
 
     private val buttonCount = 4
-    private var isInputEnabled = false  // 🔒 Флаг блокировки
+    private var isInputEnabled = false
+
+    private var currentLength = 1 // текущая длина последовательности
+    private var repeatCount = 0   // сколько раз уже прошли эту длину
+    private val maxLength = 10    // максимальная длина
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,12 +40,10 @@ class RepeatSequenceActivity : AppCompatActivity() {
     }
 
     private fun generateButtons() {
-        // Используем смайлики вместо чисел
         val emojis = listOf("😊", "😎", "😜", "🤩")
-
         for (i in 0 until buttonCount) {
             val button = Button(this).apply {
-                text = emojis[i]  // Отображаем смайлик на кнопке
+                text = emojis[i]
                 textSize = 20f
                 setOnClickListener {
                     if (isInputEnabled) onUserClick(emojis[i])
@@ -53,22 +54,32 @@ class RepeatSequenceActivity : AppCompatActivity() {
     }
 
     private fun startNewRound() {
-        isInputEnabled = false  // 🔒 Пока нельзя нажимать
+        isInputEnabled = false
         userInput.clear()
-        val emojis = listOf("😊", "😎", "😜", "🤩")
-        sequence.add(emojis.random())  // Добавляем случайный смайлик в последовательность
+        sequence.clear()
 
-        sequenceText.text = "Запоминай..."
+        // Генерируем новую последовательность нужной длины
+        val emojis = listOf("😊", "😎", "😜", "🤩")
+        repeat(currentLength) {
+            sequence.add(emojis.random())
+        }
+
+        // Показываем длину перед каждым раундом из 3 попыток
+        if (repeatCount == 0) {
+            Toast.makeText(this, "Длина последовательности: $currentLength", Toast.LENGTH_SHORT).show()
+        }
+
+        sequenceText.text = "Запоминайте..."
         showSequence()
     }
 
     private fun onUserClick(selectedEmoji: String) {
         userInput.add(selectedEmoji)
-
         val currentIndex = userInput.lastIndex
+
         if (currentIndex >= sequence.size || userInput[currentIndex] != sequence[currentIndex]) {
             Toast.makeText(this, "Неверно! Попробуй снова.", Toast.LENGTH_SHORT).show()
-            sequence.clear()
+            repeatCount = 0 // сбрасываем прогресс по этой длине
             handler.postDelayed({ startNewRound() }, 1000)
             return
         }
@@ -76,25 +87,44 @@ class RepeatSequenceActivity : AppCompatActivity() {
         if (userInput.size == sequence.size) {
             Toast.makeText(this, "Правильно!", Toast.LENGTH_SHORT).show()
             isInputEnabled = false
+            repeatCount++
+
+            if (repeatCount == 3) {
+                // Переходим к следующей длине
+                currentLength++
+                repeatCount = 0
+
+                if (currentLength > maxLength) {
+                    // Победа!
+                    Toast.makeText(this, "Потрясающе! 🎉 Вы прошли все уровни!", Toast.LENGTH_LONG).show()
+                    handler.postDelayed({
+                        currentLength = 1
+                        repeatCount = 0
+                        startNewRound()
+                    }, 2000)
+                    return
+                }
+            }
+
             handler.postDelayed({ startNewRound() }, 1000)
         }
     }
 
     private fun showSequence() {
-        val colors = listOf(Color.BLACK, Color.BLUE)  // Цвета для чередования
+        val colors = listOf(Color.BLACK, Color.BLUE)
         var delay = 0L
 
         for ((index, emoji) in sequence.withIndex()) {
             handler.postDelayed({
-                sequenceText.setTextColor(colors[index % colors.size]) // меняем цвет
-                sequenceText.text = emoji  // Отображаем смайлик вместо числа
+                sequenceText.setTextColor(colors[index % colors.size])
+                sequenceText.text = "${index + 1}: $emoji" // 👈 Добавили номер
             }, delay)
-            delay += 1000L
+            delay += 1200L
         }
 
         handler.postDelayed({
-            sequenceText.setTextColor(Color.DKGRAY)  // вернём нейтральный цвет
-            sequenceText.text = "Теперь твоя очередь!"
+            sequenceText.setTextColor(Color.DKGRAY)
+            sequenceText.text = "Теперь ваша очередь!"
             isInputEnabled = true
         }, delay)
     }
