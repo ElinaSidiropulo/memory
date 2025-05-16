@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.memorytrainer.adapters.GamesAdapter
 import com.example.memorytrainer.databinding.ActivityGamesBinding
 import com.example.memorytrainer.models.GameItem
+import com.example.memorytrainer.utils.ThemeManager
 
 import com.example.memorytrainer.activities.FindPairsActivity
 import com.example.memorytrainer.activities.RepeatSequenceActivity
@@ -17,6 +18,7 @@ class GamesActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGamesBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        ThemeManager.applyTheme(this)
         super.onCreate(savedInstanceState)
         binding = ActivityGamesBinding.inflate(layoutInflater)
         setContentView(binding.root)

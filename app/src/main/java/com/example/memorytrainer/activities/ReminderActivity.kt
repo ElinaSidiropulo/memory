@@ -16,6 +16,7 @@ import com.example.memorytrainer.R
 import com.example.memorytrainer.adapters.ReminderAdapter
 import com.example.memorytrainer.models.Reminder
 import com.example.memorytrainer.utils.ReminderStorage
+import com.example.memorytrainer.utils.ThemeManager
 import com.example.memorytrainer.activities.ReminderReceiver
 import java.util.*
 
@@ -32,6 +33,7 @@ class ReminderActivity : AppCompatActivity() {
     private var editingReminder: Reminder? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        ThemeManager.applyTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reminder)
 

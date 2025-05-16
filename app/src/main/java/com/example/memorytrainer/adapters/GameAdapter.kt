@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memorytrainer.R
 import com.example.memorytrainer.models.Card
+import com.example.memorytrainer.utils.ThemeManager
 
 class GameAdapter(
     private val cards: MutableList<Card>,

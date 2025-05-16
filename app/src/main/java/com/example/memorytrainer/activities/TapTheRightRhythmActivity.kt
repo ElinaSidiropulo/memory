@@ -12,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.memorytrainer.R
+import com.example.memorytrainer.utils.ThemeManager
 
 class TapTheRightRhythmActivity : AppCompatActivity() {
 
@@ -35,6 +36,7 @@ class TapTheRightRhythmActivity : AppCompatActivity() {
     private val maxLength = 7
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        ThemeManager.applyTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tap_the_right_rhythm)
 

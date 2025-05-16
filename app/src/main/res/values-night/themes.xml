@@ -1,7 +1,16 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Memorytrainer" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark theme override -->
+    <style name="Theme.Memorytrainer.Dark" parent="Base.Theme.Memorytrainer">
+        <item name="colorPrimary">@color/accent_dark</item>
+        <item name="colorPrimaryVariant">@color/accent_dark</item>
+        <item name="colorOnPrimary">@color/primary_text_dark</item>
+        <item name="android:statusBarColor">@color/background_dark</item>
+        <item name="android:windowBackground">@color/background_dark</item>
+        <item name="colorSecondary">@color/secondary_text_dark</item>
+        <item name="cardBackgroundColor">@color/card_background_dark</item>
+        <!-- Ensure ActionBar is enabled -->
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
     </style>
 </resources>

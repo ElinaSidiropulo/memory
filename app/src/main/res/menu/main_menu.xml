@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_about"
-        android:title="О приложении" />
+        android:title="О приложении"
+        app:showAsAction="never" />
     <item
         android:id="@+id/menu_theme"
-        android:title="Тема">
+        android:title="Тема"
+        app:showAsAction="never">
         <menu>
             <item
                 android:id="@+id/menu_theme_light"
-                android:title="Светлая" />
+                android:title="Светлая"
+                app:showAsAction="never" />
             <item
                 android:id="@+id/menu_theme_dark"
-                android:title="Тёмная" />
+                android:title="Тёмная"
+                app:showAsAction="never" />
         </menu>
     </item>
     <item
         android:id="@+id/menu_logout"
-        android:title="Выход" />
+        android:title="Выход"
+        app:showAsAction="never" />
 </menu>

@@ -15,6 +15,7 @@ import com.example.memorytrainer.R
 import com.example.memorytrainer.models.Card
 import com.example.memorytrainer.databinding.ActivityFindPairsBinding
 import com.example.memorytrainer.adapters.GameAdapter
+import com.example.memorytrainer.utils.ThemeManager
 
 class FindPairsActivity : AppCompatActivity() {
 
@@ -28,6 +29,7 @@ class FindPairsActivity : AppCompatActivity() {
     private val pendingHideTasks = mutableMapOf<Card, Runnable>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        ThemeManager.applyTheme(this)
         super.onCreate(savedInstanceState)
         binding = ActivityFindPairsBinding.inflate(layoutInflater)
         setContentView(binding.root)

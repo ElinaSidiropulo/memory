@@ -3,4 +3,16 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="purple">#800080</color>
+    <color name="background_light">#F5F7FA</color>
+    <color name="card_background_light">#FFFFFF</color>
+    <color name="primary_text_light">#2D3436</color>
+    <color name="secondary_text_light">#636E72</color>
+    <color name="accent_light">#0984E3</color>
+
+    <!-- Темная тема (пока заглушка) -->
+    <color name="background_dark">#1A1A1A</color>
+    <color name="card_background_dark">#2D2D2D</color>
+    <color name="primary_text_dark">#E0E0E0</color>
+    <color name="secondary_text_dark">#B0B0B0</color>
+    <color name="accent_dark">#55B4FF</color>
 </resources>

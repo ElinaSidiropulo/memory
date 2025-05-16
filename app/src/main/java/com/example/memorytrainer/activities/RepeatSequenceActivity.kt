@@ -10,7 +10,10 @@ import android.widget.Toast
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import com.example.memorytrainer.R
+import com.example.memorytrainer.utils.ThemeManager
+
 import kotlin.random.Random
+
 
 class RepeatSequenceActivity : AppCompatActivity() {
 
@@ -29,6 +32,7 @@ class RepeatSequenceActivity : AppCompatActivity() {
     private val maxLength = 10    // максимальная длина
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        ThemeManager.applyTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_repeat_sequence)
 
