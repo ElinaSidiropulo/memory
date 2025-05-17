@@ -7,25 +7,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
+    android:background="?android:windowBackground"
     tools:context=".activities.FindPairsActivity">
 
-    <TextView
-        android:id="@+id/textViewTitle"
-        android:layout_width="wrap_content"
+    <!-- Header with Title and Timer -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Найди пары"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:paddingBottom="16dp" />
+        android:orientation="horizontal"
+        android:paddingBottom="16dp">
 
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Найди пары"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorPrimary"
+            android:layout_gravity="center_horizontal"
+            android:paddingStart="16dp" />
+
+        <TextView
+            android:id="@+id/textViewTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="?attr/colorSecondary"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+    <!-- RecyclerView for Cards -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:padding="8dp"
-        tools:listitem="@layout/item_card"/>
-
+        android:clipToPadding="false"
+        tools:listitem="@layout/item_card" />
 
 </LinearLayout>

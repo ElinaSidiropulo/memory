@@ -46,16 +46,13 @@ class TapTheRightRhythmActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tap_the_right_rhythm)
 
-        // Инициализация UserManager
         userManager = UserManager(this)
 
-        // Настройка ActionBar
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(false)
             title = userManager.getCurrentUsername() ?: "Пользователь"
         }
 
-        // Проверка авторизации
         if (!userManager.isLoggedIn()) {
             startActivity(Intent(this, AuthActivity::class.java))
             finish()
@@ -67,7 +64,7 @@ class TapTheRightRhythmActivity : AppCompatActivity() {
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         initializeCubes()
-        startNewGame()
+        // Remove startNewGame() from here
     }
 
     // Создание меню
@@ -108,28 +105,60 @@ class TapTheRightRhythmActivity : AppCompatActivity() {
     }
 
     private fun initializeCubes() {
-        cubes = Array(totalCubes) { index ->
-            Button(this).apply {
-                val row = index / gridSize
-                val col = index % gridSize
-                layoutParams = FrameLayout.LayoutParams(100, 100).apply {
-                    leftMargin = col * 150 + 50
-                    topMargin = row * 150 + 50
-                }
-                setBackgroundColor(Color.GRAY)
-                setOnClickListener {
-                    if (isPlayerTurn) {
-                        onPlayerTap(index)
-                        animate().alpha(0.5f).setDuration(100).withEndAction {
-                            animate().alpha(1f).setDuration(100)
+        frameLayout.post {
+            // Convert dp to pixels
+            val spacingDp = 8f // Spacing between squares
+            val bufferDp = 4f // Small buffer margin around the grid
+            val spacingPx = (spacingDp * resources.displayMetrics.density).toInt()
+            val bufferPx = (bufferDp * resources.displayMetrics.density).toInt()
+
+            // Get available width and height, accounting for FrameLayout padding and buffer
+            val availableWidth = frameLayout.width - frameLayout.paddingLeft - frameLayout.paddingRight - 2 * bufferPx
+            val availableHeight = frameLayout.height - frameLayout.paddingTop - frameLayout.paddingBottom - 2 * bufferPx
+
+            // Calculate total spacing: (gridSize - 1) gaps between squares
+            val totalSpacing = spacingPx * (gridSize - 1)
+
+            // Calculate square size: min of width and height, minus spacing, divided by gridSize
+            val size = minOf(
+                (availableWidth - totalSpacing) / gridSize,
+                (availableHeight - totalSpacing) / gridSize
+            )
+
+            // Calculate grid dimensions (squares + spacing)
+            val gridWidth = size * gridSize + totalSpacing
+            val gridHeight = size * gridSize + totalSpacing
+
+            // Calculate starting offsets to center the grid
+            val startX = (frameLayout.width - gridWidth) / 2
+            val startY = (frameLayout.height - gridHeight) / 2
+
+            cubes = Array(totalCubes) { index ->
+                Button(this).apply {
+                    val row = index / gridSize
+                    val col = index % gridSize
+
+                    layoutParams = FrameLayout.LayoutParams(size, size).apply {
+                        leftMargin = startX + col * (size + spacingPx)
+                        topMargin = startY + row * (size + spacingPx)
+                    }
+
+                    setBackgroundResource(R.drawable.button_shape)
+                    setOnClickListener {
+                        if (isPlayerTurn) {
+                            onPlayerTap(index)
+                            animate().scaleX(0.9f).scaleY(0.9f).setDuration(100)
+                                .withEndAction {
+                                    animate().scaleX(1f).scaleY(1f).setDuration(100)
+                                }
                         }
                     }
+                    frameLayout.addView(this)
                 }
-                frameLayout.addView(this)
             }
+            startNewGame()
         }
     }
-
     private fun startNewGame() {
         rhythmSequence.clear()
         currentStep = 0
@@ -168,11 +197,11 @@ class TapTheRightRhythmActivity : AppCompatActivity() {
 
     private fun highlightCube(step: Int) {
         resetCubes()
-        cubes[step].setBackgroundColor(Color.GREEN)
+        cubes[step].setBackgroundResource(R.drawable.button_highlight)
     }
 
     private fun resetCubes() {
-        cubes.forEach { it.setBackgroundColor(Color.GRAY) }
+        cubes.forEach { it.setBackgroundResource(R.drawable.button_shape) }
     }
 
     private fun onPlayerTap(step: Int) {

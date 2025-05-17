@@ -58,8 +58,8 @@ class FindPairsActivity : AppCompatActivity() {
 
         cardList.clear()
         for (i in 1..8) {
-            cardList.add(Card(i, "Card $i"))
-            cardList.add(Card(i, "Card $i"))
+            cardList.add(Card(i, "$i"))
+            cardList.add(Card(i, "$i"))
         }
         cardList.shuffle()
 

@@ -16,6 +16,8 @@ import com.example.memorytrainer.R
 import com.example.memorytrainer.utils.ThemeManager
 import com.example.memorytrainer.utils.UserManager
 import android.graphics.Color
+import androidx.core.content.res.use
+
 
 class RepeatSequenceActivity : AppCompatActivity() {
 
@@ -171,21 +173,27 @@ class RepeatSequenceActivity : AppCompatActivity() {
     }
 
     private fun showSequence() {
-        val colors = listOf(Color.BLACK, Color.BLUE)
-        var delay = 0L
+        val typedArray = theme.obtainStyledAttributes(
+            intArrayOf(com.google.android.material.R.attr.colorOnPrimary)
+        )
+        val colorOnPrimary = typedArray.getColor(0, Color.BLACK)
+        typedArray.recycle()
+
+        var delay = 0L // 👈 Объявляем переменную delay
 
         for ((index, emoji) in sequence.withIndex()) {
             handler.postDelayed({
-                sequenceText.setTextColor(colors[index % colors.size])
-                sequenceText.text = "${index + 1}: $emoji" // 👈 Добавили номер
+                sequenceText.setTextColor(colorOnPrimary)
+                sequenceText.text = "${index + 1}: $emoji"
             }, delay)
             delay += 1200L
         }
 
         handler.postDelayed({
-            sequenceText.setTextColor(Color.DKGRAY)
+            sequenceText.setTextColor(colorOnPrimary)
             sequenceText.text = "Теперь ваша очередь!"
             isInputEnabled = true
         }, delay)
     }
+
 }

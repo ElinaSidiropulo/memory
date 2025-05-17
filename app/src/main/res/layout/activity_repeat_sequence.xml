@@ -11,7 +11,7 @@
         android:id="@+id/sequenceText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Смотри внимательно..."
+        android:text="Смотрите внимательно..."
         android:textSize="24sp"
         android:layout_marginBottom="24dp"/>
 
