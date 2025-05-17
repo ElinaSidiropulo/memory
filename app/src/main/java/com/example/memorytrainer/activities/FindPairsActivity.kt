@@ -1,21 +1,20 @@
-// Key changes:
-// - Added delayed hiding of single cards if no match
-// - Ensured only matched cards stay flipped
-// - Tracked game start time and calculated total duration
-
 package com.example.memorytrainer.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.appcompat.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.memorytrainer.R
 import com.example.memorytrainer.models.Card
 import com.example.memorytrainer.databinding.ActivityFindPairsBinding
 import com.example.memorytrainer.adapters.GameAdapter
 import com.example.memorytrainer.utils.ThemeManager
+import com.example.memorytrainer.utils.UserManager
 
 class FindPairsActivity : AppCompatActivity() {
 
@@ -24,6 +23,7 @@ class FindPairsActivity : AppCompatActivity() {
     private val flippedCards = mutableListOf<Card>()
     private lateinit var gameAdapter: GameAdapter
     private var startTime = 0L
+    private lateinit var userManager: UserManager
 
     private val handler = Handler(Looper.getMainLooper())
     private val pendingHideTasks = mutableMapOf<Card, Runnable>()
@@ -33,6 +33,22 @@ class FindPairsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFindPairsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Инициализация UserManager
+        userManager = UserManager(this)
+
+        // Настройка ActionBar
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(false)
+            title = userManager.getCurrentUsername() ?: "Пользователь"
+        }
+
+        // Проверка авторизации
+        if (!userManager.isLoggedIn()) {
+            startActivity(Intent(this, AuthActivity::class.java))
+            finish()
+            return
+        }
 
         initGame()
     }
@@ -113,6 +129,43 @@ class FindPairsActivity : AppCompatActivity() {
             .setPositiveButton("Да") { _, _ -> initGame() }
             .setNegativeButton("Нет") { _, _ -> finish() }
             .show()
+    }
+
+    // Создание меню
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    // Обработка выбора пунктов меню
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_about -> {
+                AlertDialog.Builder(this)
+                    .setTitle("О приложении")
+                    .setMessage("Memory Trainer — приложение для тренировки памяти.\n\nВы можете играть в мини-игры, устанавливать напоминания и отслеживать прогресс.")
+                    .setPositiveButton("OK", null)
+                    .show()
+                true
+            }
+            R.id.menu_theme_light -> {
+                ThemeManager.setThemeMode(this, ThemeManager.ThemeMode.LIGHT)
+                true
+            }
+            R.id.menu_theme_dark -> {
+                ThemeManager.setThemeMode(this, ThemeManager.ThemeMode.DARK)
+                true
+            }
+            R.id.menu_logout -> {
+                userManager.logoutUser()
+                val intent = Intent(this, AuthActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onDestroy() {

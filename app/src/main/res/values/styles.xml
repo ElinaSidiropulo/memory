@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Стиль для ActionBar -->
+    <style name="AppActionBar" parent="Widget.AppCompat.ActionBar">
+        <item name="contentInsetStart">32dp</item>
+        <item name="android:paddingEnd">32dp</item>
+    </style>
+</resources>

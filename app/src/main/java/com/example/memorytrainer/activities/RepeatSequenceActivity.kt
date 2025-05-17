@@ -1,24 +1,27 @@
 package com.example.memorytrainer.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import android.graphics.Color
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.memorytrainer.R
 import com.example.memorytrainer.utils.ThemeManager
-
-import kotlin.random.Random
-
+import com.example.memorytrainer.utils.UserManager
+import android.graphics.Color
 
 class RepeatSequenceActivity : AppCompatActivity() {
 
     private lateinit var sequenceText: TextView
     private lateinit var buttonContainer: LinearLayout
+    private lateinit var userManager: UserManager
 
     private val sequence = mutableListOf<String>()
     private val userInput = mutableListOf<String>()
@@ -36,11 +39,64 @@ class RepeatSequenceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_repeat_sequence)
 
+        // Инициализация UserManager
+        userManager = UserManager(this)
+
+        // Настройка ActionBar
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(false)
+            title = userManager.getCurrentUsername() ?: "Пользователь"
+        }
+
+        // Проверка авторизации
+        if (!userManager.isLoggedIn()) {
+            startActivity(Intent(this, AuthActivity::class.java))
+            finish()
+            return
+        }
+
         sequenceText = findViewById(R.id.sequenceText)
         buttonContainer = findViewById(R.id.buttonContainer)
 
         generateButtons()
         startNewRound()
+    }
+
+    // Создание меню
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    // Обработка выбора пунктов меню
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_about -> {
+                AlertDialog.Builder(this)
+                    .setTitle("О приложении")
+                    .setMessage("Memory Trainer — приложение для тренировки памяти.\n\nВы можете играть в мини-игры, устанавливать напоминания и отслеживать прогресс.")
+                    .setPositiveButton("OK", null)
+                    .show()
+                true
+            }
+            R.id.menu_theme_light -> {
+                ThemeManager.setThemeMode(this, ThemeManager.ThemeMode.LIGHT)
+                true
+            }
+            R.id.menu_theme_dark -> {
+                ThemeManager.setThemeMode(this, ThemeManager.ThemeMode.DARK)
+                true
+            }
+            R.id.menu_logout -> {
+                userManager.logoutUser()
+                val intent = Intent(this, AuthActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun generateButtons() {
@@ -132,5 +188,4 @@ class RepeatSequenceActivity : AppCompatActivity() {
             isInputEnabled = true
         }, delay)
     }
-
 }

@@ -5,10 +5,13 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +20,7 @@ import com.example.memorytrainer.adapters.ReminderAdapter
 import com.example.memorytrainer.models.Reminder
 import com.example.memorytrainer.utils.ReminderStorage
 import com.example.memorytrainer.utils.ThemeManager
-import com.example.memorytrainer.activities.ReminderReceiver
+import com.example.memorytrainer.utils.UserManager
 import java.util.*
 
 class ReminderActivity : AppCompatActivity() {
@@ -27,9 +30,9 @@ class ReminderActivity : AppCompatActivity() {
     private lateinit var btnSelectDateTime: Button
     private lateinit var btnSetReminder: Button
     private lateinit var rvReminders: RecyclerView
+    private lateinit var userManager: UserManager
 
     private var selectedCalendar: Calendar? = null
-
     private var editingReminder: Reminder? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +40,23 @@ class ReminderActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reminder)
 
+        // Инициализация UserManager
+        userManager = UserManager(this)
+
+        // Настройка ActionBar
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(false)
+            title = userManager.getCurrentUsername() ?: "Пользователь"
+        }
+
+        // Проверка авторизации
+        if (!userManager.isLoggedIn()) {
+            startActivity(Intent(this, AuthActivity::class.java))
+            finish()
+            return
+        }
+
+        // Инициализация UI элементов
         etReminderTitle = findViewById(R.id.et_reminder_title)
         tvDateTime = findViewById(R.id.tv_datetime)
         btnSelectDateTime = findViewById(R.id.btn_select_datetime)
@@ -56,11 +76,50 @@ class ReminderActivity : AppCompatActivity() {
         loadReminders()
     }
 
+    // Создание меню
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    // Обработка выбора пунктов меню
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_about -> {
+                AlertDialog.Builder(this)
+                    .setTitle("О приложении")
+                    .setMessage("Memory Trainer — приложение для тренировки памяти.\n\nВы можете играть в мини-игры, устанавливать напоминания и отслеживать прогресс.")
+                    .setPositiveButton("OK", null)
+                    .show()
+                true
+            }
+            R.id.menu_theme_light -> {
+                ThemeManager.setThemeMode(this, ThemeManager.ThemeMode.LIGHT)
+                true
+            }
+            R.id.menu_theme_dark -> {
+                ThemeManager.setThemeMode(this, ThemeManager.ThemeMode.DARK)
+                true
+            }
+            R.id.menu_logout -> {
+                userManager.logoutUser()
+                val intent = Intent(this, AuthActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun showDateTimePicker() {
         val calendar = Calendar.getInstance()
-        val datePickerDialog = android.app.DatePickerDialog(this,
+        val datePickerDialog = android.app.DatePickerDialog(
+            this,
             { _, year, month, dayOfMonth ->
-                val timePickerDialog = android.app.TimePickerDialog(this,
+                val timePickerDialog = android.app.TimePickerDialog(
+                    this,
                     { _, hourOfDay, minute ->
                         calendar.set(year, month, dayOfMonth, hourOfDay, minute)
                         selectedCalendar = calendar
@@ -139,7 +198,6 @@ class ReminderActivity : AppCompatActivity() {
         loadReminders()
     }
 
-
     private fun cancelReminder(id: Int) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this, ReminderReceiver::class.java)
@@ -157,7 +215,8 @@ class ReminderActivity : AppCompatActivity() {
 
     private fun loadReminders() {
         val reminders = ReminderStorage.getReminders(this)
-        rvReminders.adapter = ReminderAdapter(reminders,
+        rvReminders.adapter = ReminderAdapter(
+            reminders,
             onDelete = { reminder ->
                 ReminderStorage.deleteReminder(this, reminder.id)
                 cancelReminder(reminder.id)
@@ -172,7 +231,6 @@ class ReminderActivity : AppCompatActivity() {
                 tvDateTime.text = "Дата и время: ${selectedCalendar?.time}"
                 btnSetReminder.text = "Сохранить изменения"
             }
-
         )
     }
 }

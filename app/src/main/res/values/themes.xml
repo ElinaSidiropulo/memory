@@ -10,6 +10,8 @@
         <item name="android:windowBackground">@color/background_light</item>
         <item name="colorSecondary">@color/secondary_text_light</item>
         <item name="cardBackgroundColor">@color/card_background_light</item>
+
+        <item name="actionBarStyle">@style/AppActionBar</item>
         <!-- Ensure ActionBar is enabled -->
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">false</item>

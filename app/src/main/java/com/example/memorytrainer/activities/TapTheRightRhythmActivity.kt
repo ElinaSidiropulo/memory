@@ -1,24 +1,30 @@
 package com.example.memorytrainer.activities
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Vibrator
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.memorytrainer.R
 import com.example.memorytrainer.utils.ThemeManager
+import com.example.memorytrainer.utils.UserManager
 
 class TapTheRightRhythmActivity : AppCompatActivity() {
 
     private lateinit var rhythmText: TextView
     private lateinit var frameLayout: FrameLayout
     private lateinit var vibrator: Vibrator
+    private lateinit var userManager: UserManager
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -40,12 +46,65 @@ class TapTheRightRhythmActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tap_the_right_rhythm)
 
+        // Инициализация UserManager
+        userManager = UserManager(this)
+
+        // Настройка ActionBar
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(false)
+            title = userManager.getCurrentUsername() ?: "Пользователь"
+        }
+
+        // Проверка авторизации
+        if (!userManager.isLoggedIn()) {
+            startActivity(Intent(this, AuthActivity::class.java))
+            finish()
+            return
+        }
+
         rhythmText = findViewById(R.id.rhythmText)
         frameLayout = findViewById(R.id.frameLayout)
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         initializeCubes()
         startNewGame()
+    }
+
+    // Создание меню
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    // Обработка выбора пунктов меню
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_about -> {
+                AlertDialog.Builder(this)
+                    .setTitle("О приложении")
+                    .setMessage("Memory Trainer — приложение для тренировки памяти.\n\nВы можете играть в мини-игры, устанавливать напоминания и отслеживать прогресс.")
+                    .setPositiveButton("OK", null)
+                    .show()
+                true
+            }
+            R.id.menu_theme_light -> {
+                ThemeManager.setThemeMode(this, ThemeManager.ThemeMode.LIGHT)
+                true
+            }
+            R.id.menu_theme_dark -> {
+                ThemeManager.setThemeMode(this, ThemeManager.ThemeMode.DARK)
+                true
+            }
+            R.id.menu_logout -> {
+                userManager.logoutUser()
+                val intent = Intent(this, AuthActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun initializeCubes() {

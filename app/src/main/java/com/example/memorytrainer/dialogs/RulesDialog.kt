@@ -16,6 +16,7 @@ class RulesDialog(context: Context) : Dialog(context) {
         setContentView(R.layout.dialog_rules)
 
         val tvRules = findViewById<TextView>(R.id.tv_rules)
+        tvRules.text = context.getString(R.string.rules_game1)
 
         // Загрузка текста правил при выборе карточки
         findViewById<CardView>(R.id.card_game1).setOnClickListener {

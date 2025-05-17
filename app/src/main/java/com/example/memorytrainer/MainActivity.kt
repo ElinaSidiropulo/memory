@@ -25,13 +25,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Убедимся, что ActionBar отображается
+        userManager = UserManager(this)
+
+        if (!userManager.isLoggedIn()) {
+            startActivity(Intent(this, AuthActivity::class.java))
+            finish()
+            return
+        }
+
+        val username = userManager.getCurrentUsername()
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(false)
-            title = "Memory Trainer"
-        } ?: Log.e("MainActivity", "ActionBar is null")
+            title = username ?: "Пользователь"
+        }
 
-        userManager = UserManager(this)
 
         if (!userManager.isLoggedIn()) {
             startActivity(Intent(this, AuthActivity::class.java))
