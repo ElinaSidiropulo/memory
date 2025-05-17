@@ -43,9 +43,24 @@ class GamesActivity : AppCompatActivity() {
 
         // Настройка списка игр
         val gamesList = listOf(
-            GameItem("Найди пары", "Запоминай и находи пары", FindPairsActivity::class.java),
-            GameItem("Повтори последовательность", "Следуй за последовательностью", RepeatSequenceActivity::class.java),
-            GameItem("Запомни ритм", "Запоминай ритм и проверяй себя", TapTheRightRhythmActivity::class.java)
+            GameItem(
+                title = "Найди пары ▶",
+                description = "Запоминай и находи пары",
+                activityClass = FindPairsActivity::class.java,
+                iconResId = R.drawable.baseline_question_mark_24
+            ),
+            GameItem(
+                title = "Повтори последовательность ▶",
+                description = "Следуй за последовательностью",
+                activityClass = RepeatSequenceActivity::class.java,
+                iconResId = R.drawable.baseline_tag_faces_24
+            ),
+            GameItem(
+                title = "Запомни ритм ▶",
+                description = "Запоминай ритм и проверяй себя",
+                activityClass = TapTheRightRhythmActivity::class.java,
+                iconResId = R.drawable.ic_find_pairs
+            )
         )
 
         binding.recyclerViewGames.apply {

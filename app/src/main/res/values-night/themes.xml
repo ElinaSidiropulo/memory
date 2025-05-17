@@ -6,7 +6,7 @@
         <item name="colorPrimaryVariant">@color/accent_dark</item>
         <item name="colorOnPrimary">@color/primary_text_dark</item>
         <item name="android:statusBarColor">@color/background_dark</item>
-        <item name="android:windowBackground">@color/background_dark</item>
+        <item name="android:windowBackground">@drawable/background_dark_gradient</item>
         <item name="colorSecondary">@color/secondary_text_dark</item>
         <item name="cardBackgroundColor">@color/card_background_dark</item>
         <item name="android:textColorPrimary">@color/primary_text_dark</item>

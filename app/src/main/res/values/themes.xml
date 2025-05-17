@@ -7,7 +7,7 @@
         <item name="colorPrimaryVariant">@color/accent_light</item>
         <item name="colorOnPrimary">@color/primary_text_light</item>
         <item name="android:statusBarColor">@color/background_light</item>
-        <item name="android:windowBackground">@color/background_light</item>
+        <item name="android:windowBackground">@drawable/background_light_gradient</item>
         <item name="colorSecondary">@color/secondary_text_light</item>
         <item name="cardBackgroundColor">@color/card_background_light</item>
 

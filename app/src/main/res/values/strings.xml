@@ -7,4 +7,5 @@
     <string name="rules_game1">Правила игры 1: lalala</string>
     <string name="rules_game2">Правила игры 2: lalala</string>
     <string name="rules_game3">Правила игры 3: lalala</string>
+    <string name="game_icon">Иконка игры</string>
 </resources>

@@ -3,6 +3,7 @@ package com.example.memorytrainer.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.memorytrainer.R
 import com.example.memorytrainer.databinding.ItemGameBinding
 import com.example.memorytrainer.models.GameItem
 
@@ -23,6 +24,7 @@ class GamesAdapter(
         with(holder.binding) {
             textViewTitle.text = game.title
             textViewDescription.text = game.description
+            gameIcon.setImageResource(game.iconResId ?: R.drawable.ic_games)
             root.setOnClickListener { onClick(game) }
         }
     }
