@@ -24,7 +24,8 @@
         android:layout_height="wrap_content"
         android:text="Войти"
         android:layout_below="@id/edit_password"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="24dp"
+        android:textColor="?attr/android:statusBarColor"/>
 
     <Button
         android:id="@+id/btn_go_register"
@@ -32,5 +33,6 @@
         android:layout_height="wrap_content"
         android:text="Регистрация"
         android:layout_below="@id/btn_login"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:textColor="?attr/android:statusBarColor"/>
 </RelativeLayout>

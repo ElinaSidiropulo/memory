@@ -2,57 +2,134 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp">
+    android:background="?android:attr/windowBackground"
+    android:padding="16dp"
+    tools:context=".activities.ReminderActivity">
 
-    <EditText
-        android:id="@+id/et_reminder_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Заголовок напоминания"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
+    <!-- Заголовок -->
     <TextView
-        android:id="@+id/tv_datetime"
+        android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Выберите дату и время"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@id/et_reminder_title"
+        android:text="Напоминания"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp" />
 
-    <Button
-        android:id="@+id/btn_select_datetime"
+    <!-- Подзаголовок -->
+    <TextView
+        android:id="@+id/tv_subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Выбрать дату и время"
-        app:layout_constraintTop_toBottomOf="@id/tv_datetime"
+        android:text="Создавайте напоминания для тренировок памяти"
+        android:textSize="14sp"
+        android:textColor="?attr/colorSecondary"
+        android:maxLines="2"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
 
-    <Button
-        android:id="@+id/btn_set_reminder"
+    <!-- CardView для формы напоминания -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_form"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Установить напоминание"
-        app:layout_constraintTop_toBottomOf="@id/btn_select_datetime"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="?attr/cardBackgroundColor"
+        app:layout_constraintTop_toBottomOf="@id/tv_subtitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Поле ввода заголовка -->
+            <EditText
+                android:id="@+id/et_reminder_title"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Заголовок напоминания"
+                android:textSize="16sp"
+                android:textColor="?attr/colorPrimary"
+                android:textColorHint="?attr/colorSecondary"
+                android:backgroundTint="?attr/colorSecondary"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp" />
+
+            <!-- Текст даты и времени -->
+            <TextView
+                android:id="@+id/tv_datetime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="?attr/colorSecondary"
+                android:layout_marginTop="20dp" />
+
+            <!-- Кнопка выбора даты и времени -->
+            <Button
+                android:id="@+id/btn_select_datetime"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Выбрать дату и время"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:background="@drawable/button_shape"
+                android:textColor="?attr/android:statusBarColor"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:layout_marginTop="20dp"
+                app:backgroundTint="?attr/colorPrimary"
+                style="?android:attr/buttonBarButtonStyle"
+                android:elevation="2dp" />
+
+            <!-- Кнопка установки напоминания -->
+            <Button
+                android:id="@+id/btn_set_reminder"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Установить напоминание"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:background="@drawable/button_shape"
+                android:textColor="?attr/android:statusBarColor"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:layout_marginTop="12dp"
+                app:backgroundTint="?attr/colorPrimary"
+                style="?android:attr/buttonBarButtonStyle"
+                android:elevation="2dp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- RecyclerView для списка напоминаний -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_reminders"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/btn_set_reminder"
+        app:layout_constraintTop_toBottomOf="@id/card_form"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="20dp"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

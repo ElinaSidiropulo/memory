@@ -24,7 +24,9 @@
         android:layout_height="wrap_content"
         android:text="Создать аккаунт"
         android:layout_below="@id/edit_new_password"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="24dp"
+        android:textColor="?attr/android:statusBarColor"
+        />
 
     <Button
         android:id="@+id/btn_go_login"
@@ -32,5 +34,6 @@
         android:layout_height="wrap_content"
         android:text="Уже есть аккаунт?"
         android:layout_below="@id/btn_register"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:textColor="?attr/android:statusBarColor"/>
 </RelativeLayout>

@@ -1,31 +1,107 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="8dp"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <TextView android:id="@+id/tv_title"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView android:id="@+id/tv_time"
-        android:textSize="14sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="?attr/cardBackgroundColor"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp">
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <Button android:id="@+id/btn_edit"
-            android:text="Редактировать"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <Button android:id="@+id/btn_delete"
-            android:text="Удалить"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Контейнер для иконки и текста -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Иконка напоминания -->
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_notification"
+                app:tint="?attr/colorPrimary"
+                android:contentDescription="Иконка напоминания" />
+
+            <!-- Контейнер для текста -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp">
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="?attr/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="?attr/colorSecondary"
+                    android:layout_marginTop="4dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Кнопки -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="start"
+            android:layout_marginTop="12dp">
+
+            <Button
+                android:id="@+id/btn_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="Редактировать"
+                android:textSize="14sp"
+                android:textAllCaps="false"
+                android:background="@drawable/button_shape"
+                android:textColor="?attr/android:statusBarColor"
+                style="?android:attr/buttonBarButtonStyle"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                app:backgroundTint="?attr/colorPrimary"
+                android:elevation="2dp"
+                android:layout_marginEnd="12dp" />
+
+            <Button
+                android:id="@+id/btn_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="Удалить"
+                android:textSize="14sp"
+                android:textAllCaps="false"
+                android:background="@drawable/button_shape"
+                android:textColor="?attr/android:statusBarColor"
+                style="?android:attr/buttonBarButtonStyle"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                app:backgroundTint="?attr/colorPrimary"
+                android:elevation="2dp" />
+
+        </LinearLayout>
+
     </LinearLayout>
-</LinearLayout>
+</androidx.cardview.widget.CardView>
